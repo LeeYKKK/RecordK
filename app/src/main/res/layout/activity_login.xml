@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cn.com.lyk.recordk.acticity.LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/bg_login"
+        android:orientation="horizontal"
+        android:id="@+id/llHead">
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:id="@+id/imBack"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:text="注册"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+    <cn.com.lyk.recordk.view.CircleImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/theme_deer"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/imTx"
+        android:layout_below="@id/llHead"/>
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/lbs_popup_bg"
+        android:id="@+id/llCentre"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/imTx"
+        >
+        <EditText
+            android:id="@+id/edPhone"
+            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:background="#FBFCFC"
+            android:inputType="number"
+            android:hint="手机号"
+            android:layout_margin="2dp"
+            android:textCursorDrawable="@drawable/edit_color"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#CBCED2"
+            />
+        <EditText
+            android:id="@+id/edPass"
+            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:background="#FBFCFC"
+            android:inputType="textPassword"
+            android:hint="预设密码"
+            android:layout_margin="2dp"
+            android:textCursorDrawable="@drawable/edit_color"
+            />
+
+    </LinearLayout>
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:id="@+id/btRegister"
+        android:layout_below="@id/llCentre"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bt_login"
+        android:text="注册"
+        />
+
+
+</RelativeLayout>
