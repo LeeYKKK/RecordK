@@ -1,8 +1,9 @@
 package cn.com.lyk.recordk.service;
 
-import cn.com.lyk.recordk.been.User;
+import cn.com.lyk.recordk.utils.ResultMsg;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -10,8 +11,10 @@ import retrofit2.http.Query;
  */
 
 public interface ApiService {
-    @GET("/userAdd")
-    Call<User> user(@Query("phoneNumber")String phoneNumber,@Query("password")String password,@Query("registerTime")String registerTime);
+    //添加用户
+    @POST("/userAdd")
+    Call<ResultMsg> user(@Query("phoneNumber")String phoneNumber, @Query("password")String password,
+                         @Query("registerTime")String registerTime);
 
 
 }

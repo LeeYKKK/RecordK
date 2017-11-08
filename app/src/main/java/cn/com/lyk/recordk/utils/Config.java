@@ -10,7 +10,7 @@ public class Config {
      * @return
      */
     public final static String getServerURL(){
-        return "http://127.0.0.1:8083";
+        return "http://192.168.20.30:8083";
     }
 
 }
