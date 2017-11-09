@@ -1,5 +1,6 @@
 package cn.com.lyk.recordk.acticity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -56,8 +57,11 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void register() {
         String nowDate = DateUtil.getFullDate();
+        String phone=edPhone.getText().toString();
+        String password=edPass.getText().toString();
+
         Call<ResultMsg> loginCall = NetUtil.configRetodt(ApiService.class)
-                .user(edPhone.getText().toString(), edPass.getText().toString(), nowDate);
+                .user(edPhone.getText().toString(), Uri.decode(edPass.getText().toString()), nowDate);
         Logger.i("edPhone>>" + edPhone.getText().toString() + "<<<>>>...nowDate>>>" + nowDate);
         loginCall.enqueue(new Callback<ResultMsg>() {
             @Override
