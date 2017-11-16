@@ -10,6 +10,9 @@
     <color name="grey">#607D8B</color>
     <color name="orange">#F57C00</color>
     <color name="black">#000000</color>
+    <color name="somber">#3B3B3B</color>
+
     <color name="pink">#FD6B67</color>
     <color name="white">#FFFFFF</color>
+    <color name="green">#43CD80</color>
 </resources>

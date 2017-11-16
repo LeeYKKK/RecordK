@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.com.lyk.recordk.acticity.MainActivity">
+    tools:context="cn.com.lyk.wenote.cn.com.lyk.wenote.acticity.MainActivity">
 
   <android.support.v4.view.ViewPager
       android:id="@+id/view_pager"
