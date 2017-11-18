@@ -11,9 +11,12 @@ import retrofit2.http.Query;
 
 public interface ApiService {
     //添加用户
-    @POST("/userAdd")
+    @POST("/yk//userAdd")
     Call<ResultMsg> user(@Query("email")String email, @Query("password")String password,
                          @Query("registerTime")String registerTime);
+    //登录
+    @POST("/yk//userLogin")
+    Call<ResultMsg> userLogin(@Query("email") String email,@Query("password")String password);
 
 
 }

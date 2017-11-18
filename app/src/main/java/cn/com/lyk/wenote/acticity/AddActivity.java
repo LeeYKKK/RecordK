@@ -40,8 +40,8 @@ public class AddActivity extends AppCompatActivity {
     @ViewInject(R.id.edAffirmPassword)
     private EditText edAffirmPassword;
     //注册
-    @ViewInject(R.id.btAdd)
-    private Button btAdd;
+    @ViewInject(R.id.btAddUser)
+    private Button btAddUser;
     @ViewInject(R.id.imBack)
     private ImageView imBack;
     private Call<ResultMsg> addCall;
@@ -74,14 +74,23 @@ public class AddActivity extends AppCompatActivity {
 
             }
         });
-        btAdd.setOnClickListener(new View.OnClickListener() {
+        btAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!RegexUtil.EMAIL_PATTERN.matcher(edAddEmail.getText().toString().trim()).matches()) {
+                String email = edAddEmail.getText().toString();
+                String password = edAddPassword.getText().toString();
+                String affirmPassword = edAffirmPassword.getText().toString();
+                if (!RegexUtil.EMAIL_PATTERN.matcher(email.trim()).matches()) {
                     tlEmail.setErrorEnabled(true);
                     tlEmail.setError("邮箱格式错误");
-                } else if (!edAddPassword.getText().toString().equals(edAffirmPassword.getText().toString())) {
+                } else if (!password.equals(affirmPassword)) {
                     Toast.makeText(AddActivity.this, "您输入的密码不匹配", Toast.LENGTH_SHORT).show();
+                } else if (email == null) {
+                    Toast.makeText(AddActivity.this, "请输入邮箱", Toast.LENGTH_SHORT).show();
+                } else if (password == null & email != null) {
+                    Toast.makeText(AddActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
+                } else if (password != null && email != null&&affirmPassword==null) {
+                    Toast.makeText(AddActivity.this, "请再次输入密码", Toast.LENGTH_SHORT).show();
                 } else {
                     AddCallall();
 
@@ -91,7 +100,7 @@ public class AddActivity extends AppCompatActivity {
         imBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),HomeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -123,5 +132,9 @@ public class AddActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        addCall=null;
+    }
 }

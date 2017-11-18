@@ -31,6 +31,11 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent=new Intent(this,AddActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.btLogin:
+                Intent intent1=new Intent(this,LoginActivity.class);
+                startActivity(intent1);
+                break;
+
         }
     }
 }

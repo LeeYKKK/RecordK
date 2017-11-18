@@ -15,7 +15,6 @@ import cn.com.lyk.wenote.R;
  * Created by lyk on 2017/10/24.
  */
 public class MineFragment extends Fragment {
-    private Button tv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,12 +28,6 @@ public class MineFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        tv= (Button) getView().findViewById(R.id.tvRegister);
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
     }
 }
