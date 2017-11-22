@@ -12,7 +12,7 @@ import cn.com.lyk.wenote.R;
 /**
  * Created by lyk on 2017/10/24.
  */
-public class CategoryFragment extends Fragment {
+public class FolderFragment extends Fragment {
 
 
     @Override

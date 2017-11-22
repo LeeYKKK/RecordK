@@ -1,4 +1,4 @@
-package cn.com.lyk.wenote.acticity;
+package cn.com.lyk.wenote.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

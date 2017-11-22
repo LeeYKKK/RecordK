@@ -1,4 +1,4 @@
-package cn.com.lyk.wenote.acticity;
+package cn.com.lyk.wenote.activity;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
@@ -11,14 +11,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
 
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.com.lyk.wenote.R;
+import cn.com.lyk.wenote.been.UserInfo;
 import cn.com.lyk.wenote.service.ApiService;
+import cn.com.lyk.wenote.utils.DataCacheUtil;
 import cn.com.lyk.wenote.utils.NetUtil;
 import cn.com.lyk.wenote.utils.RegexUtil;
 import cn.com.lyk.wenote.utils.ResultMsg;
@@ -27,6 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String USERINFO_OBJ_NAME="userInfo.obj";
     @ViewInject(R.id.edLoginEmail)
     private EditText edLoginEmail;
     @ViewInject(R.id.edLoginPassword)
@@ -46,6 +54,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 点击事件
+     *
+     * @param view
+     */
     @Event(value = R.id.btLoginUser)
     private void onClick(View view) {
         switch (view.getId()) {
@@ -56,10 +69,11 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(this, "邮箱和密码不能为空", Toast.LENGTH_SHORT).show();
                 } else if (!RegexUtil.EMAIL_PATTERN.matcher(
                         edLoginEmail.getText().toString()).matches()) {
+                    //设置邮箱格式错误的提示
                     tlLoginEmail.setErrorEnabled(true);
                     tlLoginEmail.setError("");
-
                 } else {
+                    //登录操作
                     loginCall();
                 }
                 break;
@@ -67,6 +81,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 登录的网络请求
+     */
     private void loginCall() {
         loginCall = NetUtil.configRetodt(ApiService.class)
                 .userLogin(edLoginEmail.getText().toString(), edLoginPassword.getText().toString());
@@ -76,7 +93,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body().getCode().equals("200")) {
                         Toast.makeText(LoginActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(getApplication(),MainActivity.class);
+                        //保存用户信息
+                        saveUserInfo();
+                        Intent intent = new Intent(getApplication(), MainActivity.class);
                         startActivity(intent);
                     } else if (response.body().getCode().equals("403")) {
                         Toast.makeText(LoginActivity.this, "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
@@ -91,6 +110,26 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    /**
+     * 保存用户信息
+     */
+    private void saveUserInfo() {
+        String loginEmail = edLoginEmail.getText().toString();
+        String loginPassword = edLoginPassword.getText().toString();
+        UserInfo userInfo = new UserInfo();
+        userInfo.email=loginEmail;
+        userInfo.password=loginPassword;
+        Gson gson=new Gson();
+        String info= DataCacheUtil.getInfo(USERINFO_OBJ_NAME);
+        List<UserInfo>userInfos=gson.fromJson(info,new TypeToken<List<UserInfo>>(){}.getType());
+        if(userInfos==null){
+            userInfos=new ArrayList<>();
+        }
+        userInfos.add(userInfo);
+        DataCacheUtil.saveInfo(userInfos,USERINFO_OBJ_NAME);
 
     }
 

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_activity_welcome_new"
     android:orientation="vertical"
-    tools:context="cn.com.lyk.wenote.acticity.LoginActivity">
+    tools:context="cn.com.lyk.wenote.activity.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

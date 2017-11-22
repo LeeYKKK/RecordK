@@ -14,7 +14,7 @@ import cn.com.lyk.wenote.R;
 /**
  * Created by lyk on 2017/10/24.
  */
-public class MineFragment extends Fragment {
+public class LabelFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

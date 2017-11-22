@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_activity_welcome_new"
-    tools:context="cn.com.lyk.wenote.acticity.HomeActivity">
+    tools:context="cn.com.lyk.wenote.activity.HomeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
