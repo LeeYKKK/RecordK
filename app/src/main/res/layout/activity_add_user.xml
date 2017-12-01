@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_activity_welcome_new"
     android:orientation="vertical"
-    tools:context="cn.com.lyk.wenote.activity.AddActivity">
+    tools:context="cn.com.lyk.wenote.activity.AddUserActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

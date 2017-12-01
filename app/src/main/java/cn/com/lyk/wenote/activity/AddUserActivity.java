@@ -27,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddActivity extends AppCompatActivity {
+public class AddUserActivity extends AppCompatActivity {
     @ViewInject(R.id.tlEmail)
     private TextInputLayout tlEmail;
     //邮箱
@@ -50,7 +50,7 @@ public class AddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_add_user);
         x.view().inject(this);//注入view事件
         //EditText监控事件
         initEvent();
@@ -84,13 +84,13 @@ public class AddActivity extends AppCompatActivity {
                     tlEmail.setErrorEnabled(true);
                     tlEmail.setError("邮箱格式错误");
                 } else if (!password.equals(affirmPassword)) {
-                    Toast.makeText(AddActivity.this, "您输入的密码不匹配", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddUserActivity.this, "您输入的密码不匹配", Toast.LENGTH_SHORT).show();
                 } else if (email == null) {
-                    Toast.makeText(AddActivity.this, "请输入邮箱", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddUserActivity.this, "请输入邮箱", Toast.LENGTH_SHORT).show();
                 } else if (password == null & email != null) {
-                    Toast.makeText(AddActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddUserActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                 } else if (password != null && email != null&&affirmPassword==null) {
-                    Toast.makeText(AddActivity.this, "请再次输入密码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddUserActivity.this, "请再次输入密码", Toast.LENGTH_SHORT).show();
                 } else {
                     AddCallall();
 
@@ -116,10 +116,10 @@ public class AddActivity extends AppCompatActivity {
             public void onResponse(Call<ResultMsg> call, Response<ResultMsg> response) {
                 if (response.isSuccessful()) {
                     if ((response.body().getCode()).equals("200")) {
-                        Toast.makeText(AddActivity.this, "注册成功！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddUserActivity.this, "注册成功！", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(AddActivity.this, "网络错误！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddUserActivity.this, "网络错误！", Toast.LENGTH_SHORT).show();
                 }
 
             }

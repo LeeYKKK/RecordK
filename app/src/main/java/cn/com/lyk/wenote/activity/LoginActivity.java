@@ -1,9 +1,9 @@
 package cn.com.lyk.wenote.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -133,7 +133,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * edLoginEmail监听事件
+     */
     private void initEvent() {
         edLoginEmail.addTextChangedListener(new TextWatcher() {
             @Override

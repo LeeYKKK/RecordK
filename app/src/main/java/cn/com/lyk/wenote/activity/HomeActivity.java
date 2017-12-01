@@ -43,7 +43,9 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * 检查登录状态
+     */
     private void checkLoginState() {
         String info = DataCacheUtil.getInfo(USER_INFO_OBJ_NAME);
         Gson gson = new Gson();
@@ -56,11 +58,15 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 点击事件
+     * @param v
+     */
     @Event(value = {R.id.btAdd, R.id.btLogin})
     private void onClick(View v) {
         switch (v.getId()) {
             case R.id.btAdd:
-                Intent intent = new Intent(this, AddActivity.class);
+                Intent intent = new Intent(this, AddUserActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btLogin:

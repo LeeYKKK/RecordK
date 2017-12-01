@@ -1,17 +1,19 @@
 package cn.com.lyk.wenote.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.View;
 
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cn.com.lyk.wenote.R;
@@ -20,7 +22,6 @@ import cn.com.lyk.wenote.fragment.FolderFragment;
 import cn.com.lyk.wenote.fragment.LabelFragment;
 import cn.com.lyk.wenote.fragment.RecentFragment;
 import cn.com.lyk.wenote.utils.PermissionUtil;
-import cn.com.lyk.wenote.view.ViewPagerIdicator;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,
         TabLayout.OnTabSelectedListener {
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private ViewPager viewPager;
     @ViewInject(R.id.mTabLayout)
     private TabLayout mTabLayout;
+    @ViewInject(R.id.fab)
+    private FloatingActionButton fab;
     private List<Fragment> fragments = new ArrayList<Fragment>();
 
 
@@ -47,6 +50,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         //初始化ViewPager
         initViewPager();
+    }
+
+    @Event(value = {R.id.fab})
+    private void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fab:
+                Intent intent=new Intent(this,AddNoteActivity.class);
+                startActivity(intent);
+                break;
+
+        }
     }
 
     private void initViewPager() {
