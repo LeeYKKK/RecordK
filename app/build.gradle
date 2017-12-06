@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // apply plugin GreenDao
 
 android {
     compileSdkVersion 25
@@ -17,6 +18,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    greendao {
+        schemaVersion 3 //数据库版本号
+        daoPackage 'cn.com.lyk.greendao'// 设置DaoMaster、DaoSession、Dao 包名
+        targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
     }
 }
 
@@ -37,6 +43,10 @@ dependencies {
     compile 'com.orhanobut:logger:2.0.0'//Logger日志框架
     compile 'com.android.support:design:25.3.1'//design类库
     compile 'jp.wasabeef:richeditor-android:1.2.0'//富文本
+    compile 'org.greenrobot:greendao:3.2.2' // GreenDao
+
+    // This is only needed if you want to use encrypted databases
+    compile 'net.zetetic:android-database-sqlcipher:3.5.6'//加密库依赖（可选项）
 
 
 }

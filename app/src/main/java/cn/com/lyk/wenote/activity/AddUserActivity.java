@@ -117,6 +117,8 @@ public class AddUserActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if ((response.body().getCode()).equals("200")) {
                         Toast.makeText(AddUserActivity.this, "注册成功！", Toast.LENGTH_SHORT).show();
+                    }else if(response.body().getCode().equals("403")){
+                        Toast.makeText(AddUserActivity.this, "该邮箱已经注册！", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(AddUserActivity.this, "网络错误！", Toast.LENGTH_SHORT).show();

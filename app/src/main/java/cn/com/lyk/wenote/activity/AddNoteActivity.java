@@ -4,13 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -22,10 +22,20 @@ import org.xutils.x;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import cn.com.lyk.greendao.FolderInfoDao;
+import cn.com.lyk.greendao.NoteDao;
 import cn.com.lyk.wenote.R;
+import cn.com.lyk.wenote.app.MyApplication;
+import cn.com.lyk.wenote.been.FolderInfo;
+import cn.com.lyk.wenote.been.Note;
 import cn.com.lyk.wenote.utils.Const;
+import cn.com.lyk.wenote.utils.DateUtil;
+import cn.com.lyk.wenote.utils.UUIDUtil;
 import jp.wasabeef.richeditor.RichEditor;
 
 public class AddNoteActivity extends AppCompatActivity {
@@ -85,8 +95,17 @@ public class AddNoteActivity extends AppCompatActivity {
     //相机按钮
     @ViewInject(R.id.imCamera)
     private ImageButton imCamera;
+    @ViewInject(R.id.imAddNoteDone)
+    private ImageButton imAddNoteDone;
+    @ViewInject(R.id.edTitle)
+    private EditText edTitle;
+
     //保存每次拍照后的图片地址
     private String imageFile;
+    private FolderInfoDao folderInfoDao;
+    private NoteDao noteDao;
+    private Note note;
+    private static final String regEx_html = "<[^>]+>";
 
 
     @Override
@@ -95,6 +114,30 @@ public class AddNoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_note);
         x.view().inject(this);
         initView();
+        //初始化DAO
+        initGreenDao();
+        //添加默认的文件夹
+        defaultFolder();
+    }
+
+    private void initGreenDao() {
+        folderInfoDao = ((MyApplication) getApplication()).getDaoSession().getFolderInfoDao();
+        noteDao = ((MyApplication) getApplication()).getDaoSession().getNoteDao();
+    }
+
+    //判断有没有默认的文件夹
+    private void defaultFolder() {
+        List<FolderInfo> folderInfos = folderInfoDao.queryBuilder().where(FolderInfoDao.Properties.Name.eq("我的笔记")).list();
+        if (folderInfos.size() == 0)
+            createDefaultFolder();
+    }
+
+    private void createDefaultFolder() {
+        FolderInfo folderInfo = new FolderInfo();
+        folderInfo.setName("我的笔记");
+        folderInfo.setTime(DateUtil.getFullDate());
+        folderInfoDao.insert(folderInfo);
+
     }
 
     private void initView() {
@@ -118,13 +161,15 @@ public class AddNoteActivity extends AppCompatActivity {
 //        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         //禁止输入
         //mEditor.setInputEnabled(false);
+        note = new Note();
     }
 
+    //点击事件
     @Event(value = {R.id.action_redo, R.id.action_undo, R.id.action_align_center,
             R.id.action_align_left, R.id.action_align_right, R.id.action_bold, R.id.action_heading1
             , R.id.action_heading2, R.id.action_heading3, R.id.action_heading4, R.id.action_heading5,
             R.id.action_heading6, R.id.action_indent, R.id.action_insert_bullets, R.id.action_insert_checkbox,
-            R.id.action_insert_numbers, R.id.action_outdent, R.id.imCamera})
+            R.id.action_insert_numbers, R.id.action_outdent, R.id.imCamera, R.id.imAddNoteDone})
     private void onClick(View view) {
         switch (view.getId()) {
             //撤回
@@ -189,21 +234,52 @@ public class AddNoteActivity extends AppCompatActivity {
             case R.id.action_insert_checkbox:
                 mEditor.insertTodo();
                 break;
+            //相机按钮
             case R.id.imCamera:
                 //选择操作弹框
                 showPhotoDialog();
                 //Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.imAddNoteDone:
+                noteDao.insert(getNote());
+                Toast.makeText(this, "添加成功！", Toast.LENGTH_SHORT).show();
+                break;
         }
 
     }
 
+    //添加笔记
+    private Note getNote() {
+        List<FolderInfo> folderInfos = folderInfoDao.queryBuilder().where(
+                FolderInfoDao.Properties.Name.eq("我的笔记")).list();
+        note.setTitle(edTitle.getText().toString());
+        note.setContent(mEditor.getHtml().replace("'", "''").toString());
+        note.setSummary(getSummary(mEditor.getHtml().replace("'", "''")
+                .replace("&nbsp;", " ").toString()));
+        note.setFolderId(folderInfos.get(0).getFolderId());
+        note.setTime(DateUtil.getFullDate());
+        note.setNoteUUID(UUIDUtil.genUUID());
+        return note;
+    }
+
+    //获取笔记的原始文本
+    public String getSummary(String content) {
+        content = content.replace("<br>", " ");
+        Pattern p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
+        Matcher m_html = p_html.matcher(content);
+        content = m_html.replaceAll(""); // 过滤html标签
+        if (content.length() > 100) {
+            content = content.substring(0, 100);
+        }
+        return content;
+    }
+
     private void showPhotoDialog() {
-        final String [] itemPhoto=getResources().getStringArray(R.array.photo);
-        new AlertDialog.Builder(AddNoteActivity.this).setTitle("您要执行的操作：").setItems(itemPhoto, new DialogInterface.OnClickListener() {
+        final String[] itemPhoto = getResources().getStringArray(R.array.photo);
+        new AlertDialog.Builder(AddNoteActivity.this).setTitle("").setItems(itemPhoto, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(itemPhoto[which].equals("拍照")){
+                if (itemPhoto[which].equals("拍照")) {
                     Logger.i("拍照操作》》》");
                     //拍照
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -214,11 +290,27 @@ public class AddNoteActivity extends AppCompatActivity {
                     imageFile = Const.APP_BASE_DIR + "image/" + name;
                     //传递拍照后保存图片的路径，否则，图片保存到Bundle里会被压缩。
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(imageFile)));
-
+                    startActivityForResult(intent, Const.REQUEST_TAKE_PHOTO_CODE);
                 }
-
             }
         }).show();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Logger.i("request>>>" + requestCode + "/////>result>>>" + resultCode);
+        switch (requestCode) {
+            case Const.REQUEST_TAKE_PHOTO_CODE:
+                Logger.i("拍照返回");
+                Toast.makeText(this, "paizhao", Toast.LENGTH_SHORT).show();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                }).start();
+                break;
+        }
+    }
 }

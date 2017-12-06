@@ -10,7 +10,7 @@ public class Config {
      * @return
      */
     public final static String getServerURL(){
-        return "http://47.94.141.171";
+        return "http://47.94.141.171//";
     }
 
 }
